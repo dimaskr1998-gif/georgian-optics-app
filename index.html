@@ -1,0 +1,61 @@
+
+import telebot
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
+import json
+
+# Замени на токен, который выдаст @BotFather
+TOKEN = 'ТВОЙ_ТОКЕН_ОТ_BOTFATHER'
+
+# Замени на прямую ссылку, где будет лежать твой index.html
+# Обязательно должно начинаться с https://
+WEB_APP_URL = 'https://tvoy-sayt.com/index.html' 
+
+bot = telebot.TeleBot(TOKEN)
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    # Создаем клавиатуру с кнопкой
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    
+    # Кнопка, которая открывает наше Mini App
+    web_app_btn = KeyboardButton(
+        text="👓 Проверить зрение", 
+        web_app=WebAppInfo(url=WEB_APP_URL)
+    )
+    markup.add(web_app_btn)
+    
+    # Приветственное сообщение
+    bot.send_message(
+        message.chat.id,
+        "Привет! Добро пожаловать в бота Georgian Optics.\n\n"
+        "Нажми на кнопку ниже, чтобы пройти быстрый онлайн-тест на зрение и заглянуть в наш каталог оПрав.",
+        reply_markup=markup
+    )
+
+# Ловим данные, которые отправляет функция tg.sendData() из нашего HTML
+@bot.message_handler(content_types=['web_app_data'])
+def handle_web_app_data(message):
+    try:
+        # Получаем JSON строку из Mini App и превращаем в словарь
+        data = json.loads(message.web_app_data.data)
+        
+        # Проверяем, что это именно результат теста
+        if data.get('action') == 'vision_test_result':
+            score = data.get('score')
+            
+            # Отправляем ответное сообщение в чат
+            text = (
+                f"✅ Тест пройден!\n"
+                f"Ваша примерная острота зрения: <b>{score}</b>\n\n"
+                f"Если вам нужна точная диагностика на профессиональном оборудовании "
+                f"или вы просто хотите примерить новые очки, всегда рады видеть вас в наших салонах в Батуми!"
+            )
+            bot.send_message(message.chat.id, text, parse_mode='HTML')
+            
+    except Exception as e:
+        bot.send_message(message.chat.id, "Упс, что-то пошло не так при обработке результатов.")
+
+# Запуск бота
+if __name__ == '__main__':
+    print("Бот запущен и готов к работе!")
+    bot.polling(none_stop=True)
