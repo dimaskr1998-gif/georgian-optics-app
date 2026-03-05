@@ -3,43 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест на зрение — Georgian Optics</title>
+    <title>Таблица Сивцева — Georgian Optics</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 15px; background: #f4f4f9; color: #333; margin: 0; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        .optotype { font-weight: bold; line-height: 1.2; letter-spacing: 5px; margin: 10px 0; color: #000; }
-        .info-text { font-size: 14px; color: #666; margin-bottom: 20px; }
-        button { width: 100%; border: none; padding: 12px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 8px; transition: 0.3s; }
-        .btn-good { background: #28a745; color: white; }
-        .btn-warn { background: #ffc107; color: #000; }
-        .btn-bad { background: #dc3545; color: white; }
+        body { font-family: 'Courier New', Courier, monospace; text-align: center; padding: 10px; background: #fff; color: #000; margin: 0; }
+        .container { max-width: 380px; margin: auto; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
+        .header { font-family: sans-serif; font-size: 14px; margin-bottom: 20px; color: #666; }
+        .row { font-weight: bold; letter-spacing: 5px; line-height: 1.5; margin: 5px 0; display: flex; justify-content: center; align-items: center; }
+        .row-info { font-size: 8px; color: #999; margin-left: 10px; font-family: sans-serif; letter-spacing: 0; }
+        
+        /* Размеры строк (эмуляция таблицы Сивцева) */
+        .v01 { font-size: 36px; } .v02 { font-size: 28px; } .v03 { font-size: 20px; }
+        .v04 { font-size: 16px; } .v05 { font-size: 13px; } .v06 { font-size: 11px; }
+        .v07 { font-size: 9px; }  .v08 { font-size: 7px; }  .v09 { font-size: 6px; }
+        .v10 { font-size: 5px; }  .v15 { font-size: 4px; }  .v20 { font-size: 3px; }
+
+        .controls { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: sans-serif; }
+        button { border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 13px; }
+        .btn-main { background: #000; color: #fff; grid-column: span 2; }
+        .btn-sub { background: #f0f0f0; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h3>Проверка зрения</h3>
-        <p class="info-text">Держите телефон на расстоянии 30-40 см от глаз</p>
-        
-        <div class="optotype" style="font-size: 45px;">Ш Б</div>
-        <div class="optotype" style="font-size: 30px;">М Н К</div>
-        <div class="optotype" style="font-size: 20px;">Ы М Б Ш</div>
-        <div class="optotype" style="font-size: 12px;">И К Н Ш М</div>
-        <div class="optotype" style="font-size: 8px;">Б К Ш Ы М И</div>
-        
-        <br>
-        <button class="btn-good" onclick="sendResult('1.0 (Отлично)')">Вижу даже самые мелкие</button>
-        <button class="btn-warn" onclick="sendResult('0.7 (Хорошо)')">Вижу средние строки</button>
-        <button class="btn-bad" onclick="sendResult('0.4 (Нужна проверка)')">Вижу только верхние</button>
+    <div class="container">
+        <div class="header">
+            <strong>GEORGIAN OPTICS</strong><br>
+            Расстояние до экрана — 40 см
+        </div>
+
+        <div class="row v01">Ш Б <span class="row-info">0.1</span></div>
+        <div class="row v02">М Н К <span class="row-info">0.2</span></div>
+        <div class="row v03">Ы М Б Ш <span class="row-info">0.3</span></div>
+        <div class="row v04">Б К Ш М Ы <span class="row-info">0.4</span></div>
+        <div class="row v05">И Н К М Б Ш <span class="row-info">0.5</span></div>
+        <div class="row v06">Ш И Н Ы Б К <span class="row-info">0.6</span></div>
+        <div class="row v07">К Н Ш М И Ы Б <span class="row-info">0.7</span></div>
+        <div class="row v08">Б К Н М Ш И Ы <span class="row-info">0.8</span></div>
+        <div class="row v09">Ш И Н К Б М Ы <span class="row-info">0.9</span></div>
+        <div class="row v10">Н К И Ш М Ы Б <span class="row-info">1.0</span></div>
+        <div class="row v15">Ш Б М Н К Ы И <span class="row-info">1.5</span></div>
+        <div class="row v20">Б К Ш М Ы И Н <span class="row-info">2.0</span></div>
+
+        <div class="controls">
+            <button class="btn-main" onclick="sendResult('1.0 (Норма)')">Вижу 10-ю строку</button>
+            <button class="btn-sub" onclick="sendResult('0.7-0.9 (Хорошо)')">Вижу 7-9 строки</button>
+            <button class="btn-sub" onclick="sendResult('0.4-0.6 (Средне)')">Вижу 4-6 строки</button>
+            <button class="btn-sub" onclick="sendResult('0.1-0.3 (Низко)')" style="grid-column: span 2;">Вижу только верхние</button>
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-
         function sendResult(score) {
-            const data = { action: 'vision_test_result', score: score };
-            tg.sendData(JSON.stringify(data));
+            tg.sendData(JSON.stringify({ action: 'vision_test_result', score: score }));
             tg.close();
         }
     </script>
