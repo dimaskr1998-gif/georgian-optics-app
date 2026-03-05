@@ -3,46 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таблица Сивцева — Georgian Optics</title>
+    <title>Sivtsev Table — Georgian Optics</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: 'Courier New', Courier, monospace; text-align: center; padding: 10px; background: #fff; color: #000; margin: 0; }
         .container { max-width: 380px; margin: auto; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
-        .header { font-family: sans-serif; font-size: 14px; margin-bottom: 20px; color: #666; }
-        .row { font-weight: bold; letter-spacing: 5px; line-height: 1.5; margin: 5px 0; display: flex; justify-content: center; align-items: center; }
-        .row-info { font-size: 8px; color: #999; margin-left: 10px; font-family: sans-serif; letter-spacing: 0; }
+        .header { font-family: sans-serif; font-size: 14px; margin-bottom: 15px; color: #666; font-weight: bold; }
+        .instruction { font-family: sans-serif; background: #f9f9f9; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 13px; line-height: 1.4; border: 1px solid #eee; }
+        .row { font-weight: bold; letter-spacing: 5px; line-height: 1.3; margin: 3px 0; display: flex; justify-content: center; align-items: center; }
+        
+        /* Оригинальные пропорции таблицы Сивцева */
         .v01 { font-size: 36px; } .v02 { font-size: 28px; } .v03 { font-size: 20px; }
         .v04 { font-size: 16px; } .v05 { font-size: 13px; } .v06 { font-size: 11px; }
-        .v07 { font-size: 9px; }  .v08 { font-size: 7px; }  .v09 { font-size: 6px; }
-        .v10 { font-size: 5px; }  .v15 { font-size: 4px; }  .v20 { font-size: 3px; }
-        .controls { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: sans-serif; }
-        button { border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 13px; }
-        .btn-main { background: #000; color: #fff; grid-column: span 2; }
-        .btn-sub { background: #f0f0f0; border: 1px solid #ccc; }
+        .v07 { font-size: 9px; }  .v08 { font-size: 7px; }  .v10 { font-size: 5px; }
+
+        .controls { margin-top: 20px; display: grid; grid-template-columns: 1fr; gap: 8px; font-family: sans-serif; }
+        button { border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; }
+        .btn-black { background: #000; color: #fff; }
+        .btn-gray { background: #f0f0f0; border: 1px solid #ccc; }
+        #step-right { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header"><strong>GEORGIAN OPTICS</strong><br>Расстояние — 40 см</div>
-        <div class="row v01">Ш Б <span class="row-info">0.1</span></div>
-        <div class="row v02">М Н К <span class="row-info">0.2</span></div>
-        <div class="row v03">Ы М Б Ш <span class="row-info">0.3</span></div>
-        <div class="row v04">Б К Ш М Ы <span class="row-info">0.4</span></div>
-        <div class="row v05">И Н К М Б Ш <span class="row-info">0.5</span></div>
-        <div class="row v06">Ш И Н Ы Б К <span class="row-info">0.6</span></div>
-        <div class="row v07">К Н Ш М И Ы Б <span class="row-info">0.7</span></div>
-        <div class="row v010">Н К И Ш М Ы Б <span class="row-info">1.0</span></div>
-        <div class="controls">
-            <button class="btn-main" onclick="sendResult('1.0 (Норма)')">Вижу 10-ю строку</button>
-            <button class="btn-sub" onclick="sendResult('0.4-0.6 (Средне)')">Вижу 4-6 строки</button>
-            <button class="btn-sub" onclick="sendResult('0.1-0.3 (Низко)')">Вижу только верхние</button>
+        <div class="header">GEORGIAN OPTICS</div>
+
+        <div id="step-left">
+            <div class="instruction">
+                <b>Step 1:</b> Cover your <b>RIGHT</b> eye.<br>
+                <b>Шаг 1:</b> Закройте <b>ПРАВЫЙ</b> глаз.
+            </div>
+            <div class="row v01">Ш Б</div>
+            <div class="row v02">М Н К</div>
+            <div class="row v03">Ы М Б Ш</div>
+            <div class="row v04">Б К Ш М Ы</div>
+            <div class="row v06">Ш И Н Ы Б К</div>
+            <div class="row v10">Н К И Ш М Ы Б</div>
+            <div class="controls">
+                <button class="btn-black" onclick="nextStep('L: 1.0 (Normal)')">I see the bottom row / Вижу нижнюю строку</button>
+                <button class="btn-gray" onclick="nextStep('L: 0.4-0.6 (Mid)')">I see middle rows / Вижу средние строки</button>
+                <button class="btn-gray" onclick="nextStep('L: < 0.3 (Low)')">I see only top rows / Вижу только верхние</button>
+            </div>
+        </div>
+
+        <div id="step-right">
+            <div class="instruction">
+                <b>Step 2:</b> Cover your <b>LEFT</b> eye.<br>
+                <b>Шаг 2:</b> Закройте <b>ЛЕВЫЙ</b> глаз.
+            </div>
+            <div class="row v01">Ш Б</div>
+            <div class="row v02">М Н К</div>
+            <div class="row v03">Ы М Б Ш</div>
+            <div class="row v04">Б К Ш М Ы</div>
+            <div class="row v06">Ш И Н Ы Б К</div>
+            <div class="row v10">Н К И Ш М Ы Б</div>
+            <div class="controls">
+                <button class="btn-black" onclick="finishTest('R: 1.0 (Normal)')">I see the bottom row / Вижу нижнюю строку</button>
+                <button class="btn-gray" onclick="finishTest('R: 0.4-0.6 (Mid)')">I see middle rows / Вижу средние строки</button>
+                <button class="btn-gray" onclick="finishTest('R: < 0.3 (Low)')">I see only top rows / Вижу только верхние</button>
+            </div>
         </div>
     </div>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        function sendResult(score) {
-            tg.sendData(JSON.stringify({ action: 'vision_test_result', score: score }));
+        let leftResult = "";
+
+        function nextStep(result) {
+            leftResult = result;
+            document.getElementById('step-left').style.display = 'none';
+            document.getElementById('step-right').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function finishTest(rightResult) {
+            const finalScore = leftResult + " | " + rightResult;
+            tg.sendData(JSON.stringify({ action: 'vision_test_result', score: finalScore }));
             tg.close();
         }
     </script>
